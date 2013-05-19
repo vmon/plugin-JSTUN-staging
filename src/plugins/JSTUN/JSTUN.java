@@ -188,28 +188,6 @@ public class JSTUN implements FredPlugin, FredPluginIPDetector, FredPluginThread
 			DetectedIP[] ip;
 			try {
 				ip = runTest(startAddress);
-				NetworkInterface nif = NetworkInterface.getByInetAddress(startAddress);
-				int mtu = -1;
-				if(nif != null) {
-					try {
-						Class c = nif.getClass();
-						Method m = c.getDeclaredMethod("getMTU", new Class[0]);
-						if(m != null) {
-							Integer iMTU = (Integer) m.invoke(nif, new Object[0]);
-							if(iMTU != null) {
-								mtu = iMTU.intValue();
-								System.err.println("Found interface MTU: "+nif.getName()+" : "+mtu);
-							}
-						}
-					} catch (Throwable t) {
-						System.err.println("Trying to access 1.6 getMTU(), caught "+t);
-					}
-				}
-
-				if(ip != null) {
-					for(int i=0; i<ip.length; i++)
-						ip[i].mtu = mtu;
-				}
 			} catch (Throwable t) {
 				ip = null;
 				System.err.println("Caught "+t);
